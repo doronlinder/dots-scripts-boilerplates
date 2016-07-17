@@ -1,6 +1,9 @@
 PROJECT_NAME=$1
 DEPENDENCIES="react react-dom"
-DEV_DEPENDENCIES="webpack webpack-dev-server babel-loader babel-preset-es2015 babel-preset-react"
+BABEL_DEPDENDENCIES="babel-loader babel-preset-es2015 babel-preset-react"
+WEBPACK_DEPENDENCIES="webpack webpack-dev-server"
+ESLINT_DEPENDENCIES="eslint eslint-plugin-react"
+DEV_DEPENDENCIES="${WEBPACK_DEPENDENCIES} ${BABEL_DEPDENDENCIES} ${ESLINT_DEPENDENCIES}"
 
 [ -z "${PROJECT_NAME}" ] && {
     >&2 echo Missing project-name
@@ -19,7 +22,6 @@ cat > package.json << PACKAGE_JSON
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "build": "cp src/index.html dist/. && webpack --watch",
         "start": "cp src/index.html dist/. && { webpack-dev-server & } && google-chrome --incognito http://localhost:8080/webpack-dev-server/"    
     }
 }
@@ -52,6 +54,48 @@ module.exports = {
     }
 }
 WEBPACK_CONFIG_JS
+
+cat > .eslintrc.json << ESLINTRC_JSON
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    }
+}
+ESLINTRC_JSON
+
 
 npm install --save ${DEPENDENCIES}
 npm install --save-dev ${DEV_DEPENDENCIES}
