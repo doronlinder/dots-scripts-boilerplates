@@ -22,7 +22,7 @@ cat > package.json << PACKAGE_JSON
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "start": "cp src/index.html dist/. && { webpack-dev-server & } && google-chrome --incognito http://localhost:8080/webpack-dev-server/"    
+        "start": "cp src/index.html dist/. && { webpack-dev-server & } && google-chrome --incognito http://localhost:8080/webpack-dev-server/"
     }
 }
 PACKAGE_JSON
@@ -118,13 +118,13 @@ INDEX_HTML
 cat > src/app.js << APP_JS
 import React from 'react';
 import ReactDOM from 'react-dom';
- 
+
 class Hello extends React.Component {
     render() {
         return <h1>Hello ${PROJECT_NAME}!</h1>
     }
 }
- 
+
 ReactDOM.render(<Hello/>, document.getElementById('app'));
 APP_JS
 
