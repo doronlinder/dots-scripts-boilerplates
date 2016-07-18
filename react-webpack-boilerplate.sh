@@ -1,4 +1,5 @@
 PROJECT_NAME=$1
+PROJECTS_FOLDER=~/sandbox
 DEPENDENCIES="react react-dom"
 BABEL_DEPDENDENCIES="babel-loader babel-preset-es2015 babel-preset-react"
 WEBPACK_DEPENDENCIES="webpack webpack-dev-server"
@@ -11,10 +12,16 @@ DEV_DEPENDENCIES="${WEBPACK_DEPENDENCIES} ${BABEL_DEPDENDENCIES} ${ESLINT_DEPEND
     exit 1
 }
 
-cd ~/sandbox
-mkdir -p ~/sandbox/${PROJECT_NAME}/{src,dist}
+[ -d "${PROJECTS_FOLDER}" ] || {
+    PROJECTS_FOLDER=~/projects
+    [ -d "${PROJECTS_FOLDER}" ] || {
+        >&2 echo Could not find neither ~/sandbox nor ~/projects to start the project in.
+        exit 1
+    }
+}
 
-cd ~/sandbox/${PROJECT_NAME}
+mkdir -p ${PROJECTS_FOLDER}/${PROJECT_NAME}/{src,dist}
+cd ${PROJECTS_FOLDER}/${PROJECT_NAME}
 
 cat > package.json << PACKAGE_JSON
 {
@@ -127,5 +134,3 @@ class Hello extends React.Component {
 
 ReactDOM.render(<Hello/>, document.getElementById('app'));
 APP_JS
-
-cd ~/sandbox/${PROJECT_NAME}
