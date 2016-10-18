@@ -71,7 +71,7 @@ function installJavaAndMaven() {
 
 function installDocker() {
     which docker > /dev/null && return
-    sudo apt-get install -y docker.io
+    sudo apt-get install -y docker.io docker-compose
     sudo usermod -aG docker $USER
     MESSAGES="${MESSAGES}\nIn order for docker to work for anyone but root you need to reboot\e[0m"
 }
