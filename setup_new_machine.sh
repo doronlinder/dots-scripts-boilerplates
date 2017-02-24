@@ -38,6 +38,10 @@ function installTmux() {
     which tmux > /dev/null || sudo apt-get install -y tmux
 }
 
+function installTree() {
+    which tree > /dev/null || sudo apt-get install -y tree
+}
+
 function installVimAndPlugged() {
 
     which vim > /dev/null || sudo apt-get install -y vim
@@ -101,6 +105,7 @@ function installAngularCLI() {
 installGit
 installNvm
 installTmux
+installTree
 installVimAndPlugged
 setupProjectsDir
 setupDotFiles
