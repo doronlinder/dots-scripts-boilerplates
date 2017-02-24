@@ -88,6 +88,12 @@ BASH_ALIASES
     MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for aliases changes to take effect"
 }
 
+function installTypeScript() {
+    which tsc > /dev/null && return
+    echo SHOULDNT BE HERE
+    npm install -g typescript
+}
+
 installGit
 installNvm
 installTmux
@@ -97,4 +103,5 @@ setupDotFiles
 setupAliases
 #installJavaAndMaven
 #installDocker
+installTypeScript
 showFinishingMessages
