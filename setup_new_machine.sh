@@ -90,8 +90,12 @@ BASH_ALIASES
 
 function installTypeScript() {
     which tsc > /dev/null && return
-    echo SHOULDNT BE HERE
     npm install -g typescript
+}
+
+function installAngularCLI() {
+    npm ls -g @angular/cli > /dev/null 2>&1 && return
+    npm install -g @angular/cli
 }
 
 installGit
@@ -104,4 +108,5 @@ setupAliases
 #installJavaAndMaven
 #installDocker
 installTypeScript
+installAngularCLI
 showFinishingMessages
