@@ -31,8 +31,7 @@ function installNvm() {
     }
 
     [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-    nvm install 6 || echo -e "\e[1;91mNo NVM!!!\e[0m"
-
+    nvm ls 6 | grep 6 > /dev/null || nvm install 6 || echo -e "\e[1;91mNo NVM!!!\e[0m"
 }
 
 function installTmux() {
@@ -96,6 +95,6 @@ installVimAndPlugged
 setupProjectsDir
 setupDotFiles
 setupAliases
-installJavaAndMaven
-installDocker
+#installJavaAndMaven
+#installDocker
 showFinishingMessages
