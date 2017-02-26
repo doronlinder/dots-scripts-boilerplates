@@ -42,6 +42,10 @@ function installTree() {
     which tree > /dev/null || sudo apt-get install -y tree
 }
 
+function installJq() {
+    which jq > /dev/null || sudo apt-get install -y jq
+}
+
 function installVimAndPlugged() {
 
     which vim > /dev/null || sudo apt-get install -y vim
@@ -106,6 +110,7 @@ installGit
 installNvm
 installTmux
 installTree
+installJq
 installVimAndPlugged
 setupProjectsDir
 setupDotFiles
