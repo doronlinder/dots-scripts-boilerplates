@@ -106,6 +106,10 @@ function installAngularCLI() {
     npm install -g @angular/cli
 }
 
+function installSass() {
+    which sass > /dev/null || sudo apt-get install -y ruby-sass
+}
+
 installGit
 installNvm
 installTmux
@@ -119,4 +123,5 @@ setupAliases
 #installDocker
 installTypeScript
 installAngularCLI
+installSass
 showFinishingMessages
