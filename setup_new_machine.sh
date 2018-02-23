@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+MESSAGES=""
 
 function installGit() {
     which git > /dev/null && return
@@ -31,7 +32,7 @@ function installNvm() {
     }
 
     [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-    nvm ls 6 | grep 6 > /dev/null || nvm install 6 || echo -e "\e[1;91mNo NVM!!!\e[0m"
+    nvm ls 9 | grep 9 > /dev/null || nvm install 9 || echo -e "\e[1;91mNo NVM!!!\e[0m"
 }
 
 function installTmux() {
@@ -106,9 +107,13 @@ function installAngularCLI() {
     npm install -g @angular/cli
 }
 
-function installSass() {
-    which sass > /dev/null || sudo apt-get install -y ruby-sass
+function setupKeyboardMapping() {
+    grep setxkbmap ~/.bashrc > /dev/null 2>&1 || {
+        echo 'setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll,caps:escape gb,il' >> ~/.bashrc
+        MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for keyboard mapping changes to take effect"
+    }
 }
+
 
 installGit
 installNvm
@@ -119,9 +124,9 @@ installVimAndPlugged
 setupProjectsDir
 setupDotFiles
 setupAliases
+setupKeyboardMapping
 #installJavaAndMaven
 #installDocker
-installTypeScript
-installAngularCLI
-installSass
+#installTypeScript
+#installAngularCLI
 showFinishingMessages
