@@ -6,7 +6,12 @@ set path+=**
 set wildmenu
 filetype plugin indent on
 
-colorscheme murphy
+set backup
+set backupdir=/tmp//
+set dir=/tmp//
+
+set termguicolors
+set t_ut=
 
 let g:netrw_banner=0
 let g:netrw_liststyle=3
@@ -34,3 +39,5 @@ inoremap \be beforeEach(() => {<CR>});<ESC>O
 inoremap \ae afterEach(() => {<CR>});<ESC>O
 inoremap \it it('', () => {<CR>});<ESC>kci'
 inoremap \() () => {<CR>}));<ESC>kf)i
+
+autocmd BufWritePre *.js %s/\s\+$//e
