@@ -2,20 +2,25 @@ set nocompatible
 set nowrap nu smartindent
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
-set path+=**
+set path+=public/**
+set path+=src/**
+set path+=scripts/**
+set path+=styles/**
 set wildmenu
+set suffixesadd=.js
+set suffixesadd+=.json
 filetype plugin indent on
 
 set backup
 set backupdir=/tmp//
 set dir=/tmp//
 
-set termguicolors
+" set termguicolors
 set t_ut=
 
 let g:netrw_banner=0
 let g:netrw_liststyle=3
-let g:netrw_list_hide= netrw_gitignore#Hide() . '*.sw?'
+" let g:netrw_list_hide= netrw_gitignore#Hide() . '*.sw?'
 
 call plug#begin('~/.vim/plugged')
 Plug 'vim-syntastic/syntastic'
@@ -41,3 +46,5 @@ inoremap \it it('', () => {<CR>});<ESC>kci'
 inoremap \() () => {<CR>}));<ESC>kf)i
 
 autocmd BufWritePre *.js %s/\s\+$//e
+
+colorscheme delek
