@@ -4,6 +4,7 @@ set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
 set path+=public/**
 set path+=src/**
+set path+=js/**
 set path+=scripts/**
 set path+=styles/**
 set wildmenu
@@ -23,21 +24,13 @@ let g:netrw_liststyle=3
 " let g:netrw_list_hide= netrw_gitignore#Hide() . '*.sw?'
 
 call plug#begin('~/.vim/plugged')
-Plug 'vim-syntastic/syntastic'
-Plug 'mtscout6/syntastic-local-eslint.vim'
+Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 call plug#end()
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['eslint']
-
 nnoremap Q <nop>
+nmap <Leader>p <Plug>(Prettier)
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.yaml,*.html Prettier
 
 inoremap \des describe('', () => {<CR>});<ESC>kci'
 inoremap \be beforeEach(() => {<CR>});<ESC>O
@@ -45,6 +38,6 @@ inoremap \ae afterEach(() => {<CR>});<ESC>O
 inoremap \it it('', () => {<CR>});<ESC>kci'
 inoremap \() () => {<CR>}));<ESC>kf)i
 
-autocmd BufWritePre *.js %s/\s\+$//e
+" autocmd BufWritePre *.js %s/\s\+$//e
 
 colorscheme delek

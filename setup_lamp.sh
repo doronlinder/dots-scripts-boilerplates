@@ -3,12 +3,12 @@ set -e
 MESSAGES=""
 
 function updatePackages() {
-  apt update
+  sudo apt update
 }
 
 function setupLAMP() {
-  systemctl status apache2 > /dev/null && exit
-  apt-get install -y lamp-server^
+  sudo systemctl status apache2 > /dev/null && exit
+  sudo apt-get install -y lamp-server^
 }
 
 function showFinishingMessages() {
@@ -19,7 +19,7 @@ function showFinishingMessages() {
 function mysqlChangeRootAuth() {
   read -esp "Please enter new root mysql password: " rootpass
   echo
-  mysql -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '$rootpass'; FLUSH PRIVILEGES;"
+  sudo mysql -e "ALTER USER root@localhost IDENTIFIED WITH mysql_native_password BY '$rootpass'; FLUSH PRIVILEGES;"
 }
 
 function createVimAdventuresDB() {

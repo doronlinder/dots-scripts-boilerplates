@@ -12,7 +12,7 @@ function installGit() {
                 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
             }
         
-            export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+            export PS1='\u@\h \[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ '
 GIT_PS1_BASH_RC
     }
 
@@ -32,7 +32,7 @@ function installNvm() {
     }
 
     [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-    nvm ls 9 | grep 9 > /dev/null || nvm install 9 || echo -e "\e[1;91mNo NVM!!!\e[0m"
+    nvm ls 10 | grep 10 > /dev/null || nvm install 10 || echo -e "\e[1;91mNo NVM!!!\e[0m"
 }
 
 function installTmux() {
@@ -45,6 +45,10 @@ function installTree() {
 
 function installJq() {
     which jq > /dev/null || sudo apt-get install -y jq
+}
+
+function installCurl() {
+    which curl > /dev/null || sudo apt-get install -y curl
 }
 
 function installVimAndPlugged() {
@@ -114,19 +118,30 @@ function setupKeyboardMapping() {
     }
 }
 
+function setupSSHKeys() {
+  if [ ! -f ~/.ssh/id_rsa ]; then
+    read -ep "Please enter email for ssh keys: " sshemail
+    echo
+    ssh-keygen -t rsa -b 4096 -C "${sshemail}"
+    MESSAGES="${MESSAGES}\nAdd new ssh keys to github and gitlab.\e[0m"
+  fi
+}
+
 
 installGit
 installNvm
 installTmux
 installTree
+installCurl
 installJq
 installVimAndPlugged
 setupProjectsDir
 setupDotFiles
 setupAliases
-setupKeyboardMapping
+#setupKeyboardMapping
 #installJavaAndMaven
 #installDocker
 #installTypeScript
 #installAngularCLI
+setupSSHKeys
 showFinishingMessages
