@@ -9,6 +9,19 @@ function updatePackages() {
 function setupLAMP() {
   sudo systemctl status apache2 > /dev/null && exit
   sudo apt-get install -y lamp-server^
+  sudo a2enmod rewrite headers
+  sudo systemctl restart apache2
+}
+
+function allowZeroDatesInMySql() {
+  grep "Allow 00-00-0000" /etc/mysql/mysql.conf.d/mysqld.cnf > /dev/null && exit
+  sudo tee -a /etc/mysql/mysql.conf.d/mysqld.cnf <<-ALLOW_ZEROS_IN_DATE
+
+# Allow 00-00-0000 00:00:00 as a valid date!
+#sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+ALLOW_ZEROS_IN_DATE
+  sudo systemctl restart mysql
 }
 
 function showFinishingMessages() {
@@ -34,6 +47,7 @@ function createVimAdventuresDB() {
 
 updatePackages
 setupLAMP
+allowZeroDatesInMySql
 mysqlChangeRootAuth
 createVimAdventuresDB
 showFinishingMessages
