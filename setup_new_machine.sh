@@ -102,7 +102,7 @@ function setupAliases() {
     cat > ~/.bash_aliases <<-BASH_ALIASES
 alias gs='git status'
 alias gd='git diff'
-alias sgrep='grep -r --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=public --exclude-dir=lib'
+alias sgrep='grep -r --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=public --exclude-dir=lib --exclude-dir=dist'
 BASH_ALIASES
     MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for aliases changes to take effect"
 }
