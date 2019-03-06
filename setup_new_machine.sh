@@ -19,6 +19,10 @@ GIT_PS1_BASH_RC
     MESSAGES="${MESSAGES}\nCreate an ssh cert for github"
 }
 
+function installBuildEssential() {
+    which make > /dev/null || sudo apt-get install -y build-essential
+}
+
 function installNvm() {
 
     if [ ! -d ~/.nvm ]; then
@@ -94,9 +98,11 @@ function showFinishingMessages() {
 }
 
 function setupAliases() {
+    [ -f ~/.bash_aliases ] && return
     cat > ~/.bash_aliases <<-BASH_ALIASES
-        alias gs='git status'
-        alias gd='git diff'
+alias gs='git status'
+alias gd='git diff'
+alias sgrep='grep -r --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=public --exclude-dir=lib'
 BASH_ALIASES
     MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for aliases changes to take effect"
 }
@@ -129,6 +135,7 @@ function setupSSHKeys() {
 
 
 installGit
+installBuildEssential
 installNvm
 installTmux
 installTree
@@ -138,7 +145,7 @@ installVimAndPlugged
 setupProjectsDir
 setupDotFiles
 setupAliases
-#setupKeyboardMapping
+setupKeyboardMapping
 #installJavaAndMaven
 #installDocker
 #installTypeScript
