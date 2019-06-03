@@ -133,6 +133,12 @@ function setupSSHKeys() {
   fi
 }
 
+function installPostgres() {
+    which psql > /dev/null && return
+    sudo apt-get install -y postgresql postgresql-contrib
+    sudo -u postgres createuser -s $(whoami)
+    sudo -u postgres createdb $(whoami)
+}
 
 installGit
 installBuildEssential
@@ -151,4 +157,5 @@ setupKeyboardMapping
 #installTypeScript
 #installAngularCLI
 setupSSHKeys
+installPostgres
 showFinishingMessages
