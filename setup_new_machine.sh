@@ -146,6 +146,13 @@ function installObsStudio() {
 	apt install -y obs-studio
 }
 
+function installPostgres() {
+    which psql > /dev/null && return
+    sudo apt-get install -y postgresql postgresql-contrib
+    sudo -u postgres createuser -s $(whoami)
+    sudo -u postgres createdb $(whoami)
+}
+
 installGit
 installBuildEssential
 installNvm
@@ -165,4 +172,5 @@ setupKeyboardMapping
 #installAngularCLI
 setupSSHKeys
 #installObsStudio
+#installPostgres
 showFinishingMessages
