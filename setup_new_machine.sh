@@ -39,6 +39,10 @@ function installNvm() {
     nvm ls 10 | grep 10 > /dev/null || nvm install 10 || echo -e "\e[1;91mNo NVM!!!\e[0m"
 }
 
+function installHeroku() {
+    which heroku > /dev/null || sudo snap install heroku --classic
+}
+
 function installTmux() {
     which tmux > /dev/null || sudo apt-get install -y tmux
 }
@@ -103,6 +107,7 @@ function setupAliases() {
 alias gs='git status'
 alias gd='git diff'
 alias sgrep='grep -r --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=public --exclude-dir=lib --exclude-dir=dist'
+alias int='npm run $(jq --raw-output ".scripts | keys[]" package.json | grep int | grep -v lint)'
 BASH_ALIASES
     MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for aliases changes to take effect"
 }
@@ -133,6 +138,13 @@ function setupSSHKeys() {
   fi
 }
 
+function installObsStudio() {
+    which obs > /dev/null && return
+    apt-get install -y ffmpeg
+	add-apt-repository ppa:obsproject/obs-studio
+	apt update
+	apt install -y obs-studio
+}
 
 installGit
 installBuildEssential
@@ -142,6 +154,7 @@ installTree
 installCurl
 installJq
 installVimAndPlugged
+#installHeroku
 setupProjectsDir
 setupDotFiles
 setupAliases
@@ -151,4 +164,5 @@ setupKeyboardMapping
 #installTypeScript
 #installAngularCLI
 setupSSHKeys
+#installObsStudio
 showFinishingMessages
