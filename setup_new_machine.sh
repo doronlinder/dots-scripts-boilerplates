@@ -153,6 +153,13 @@ function installPostgres() {
     sudo -u postgres createdb $(whoami)
 }
 
+function installOpenShot() {
+    which openshot-qt > /dev/null && return
+	add-apt-repository -y ppa:openshot.developers/ppa
+	apt-get update
+	apt-get install -y openshot-qt
+}
+
 installGit
 installBuildEssential
 installNvm
@@ -173,4 +180,5 @@ setupKeyboardMapping
 setupSSHKeys
 #installObsStudio
 #installPostgres
+#installOpenShot
 showFinishingMessages
