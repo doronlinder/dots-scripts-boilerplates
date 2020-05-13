@@ -156,9 +156,17 @@ function installPostgres() {
 function installOpenShot() {
     which openshot-qt > /dev/null && return
 	add-apt-repository -y ppa:openshot.developers/ppa
-	apt-get update
+	apt-get -y update
 	apt-get install -y openshot-qt
 }
+
+function installAudioRecorder() {
+    which audio-recorder > /dev/null && return
+	apt-add-repository ppa:audio-recorder/ppa
+	apt-get -y update
+	apt-get install -y audio-recorder
+}
+
 
 installGit
 installBuildEssential
@@ -181,4 +189,5 @@ setupSSHKeys
 #installObsStudio
 #installPostgres
 #installOpenShot
+#installAudioRecorder
 showFinishingMessages
