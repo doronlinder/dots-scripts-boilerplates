@@ -14,18 +14,18 @@ function setupLAMP() {
 }
 
 function allowZeroDatesInMySql() {
-  grep "Allow 00-00-0000" /etc/mysql/mysql.conf.d/mysqld.cnf > /dev/null && exit
+  grep "Allow 00-00-0000" /etc/mysql/mysql.conf.d/mysqld.cnf > /dev/null && return
   sudo tee -a /etc/mysql/mysql.conf.d/mysqld.cnf <<-ALLOW_ZEROS_IN_DATE
 
 # Allow 00-00-0000 00:00:00 as a valid date!
-#sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
-sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+# 18.04 or 18.10 sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
+# 20.04 sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
 ALLOW_ZEROS_IN_DATE
   sudo systemctl restart mysql
 }
 
 function showFinishingMessages() {
-  which google-chrome > /dev/null || MESSAGES="${MESSAGES}\nInstall Chrome manually"
   echo -e "\n\e[1;91m${MESSAGES}\e[0m"
 }
 
