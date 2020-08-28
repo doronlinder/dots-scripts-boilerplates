@@ -97,7 +97,6 @@ function installDocker() {
 }
 
 function showFinishingMessages() {
-    which google-chrome > /dev/null || MESSAGES="${MESSAGES}\nInstall Chrome manually"
     echo -e "\n\e[1;91m${MESSAGES}\e[0m"
 }
 
@@ -141,9 +140,9 @@ function setupSSHKeys() {
 function installObsStudio() {
     which obs > /dev/null && return
     apt-get install -y ffmpeg
-	add-apt-repository ppa:obsproject/obs-studio
-	apt update
-	apt install -y obs-studio
+    add-apt-repository ppa:obsproject/obs-studio
+    apt update
+    apt install -y obs-studio
 }
 
 function installPostgres() {
@@ -155,16 +154,23 @@ function installPostgres() {
 
 function installOpenShot() {
     which openshot-qt > /dev/null && return
-	add-apt-repository -y ppa:openshot.developers/ppa
-	apt-get -y update
-	apt-get install -y openshot-qt
+    add-apt-repository -y ppa:openshot.developers/ppa
+    apt-get -y update
+    apt-get install -y openshot-qt
 }
 
 function installAudioRecorder() {
     which audio-recorder > /dev/null && return
-	apt-add-repository ppa:audio-recorder/ppa
-	apt-get -y update
-	apt-get install -y audio-recorder
+    apt-add-repository ppa:audio-recorder/ppa
+    apt-get -y update
+    apt-get install -y audio-recorder
+}
+
+function installChrome() {
+    which google-chrome > /dev/null && return
+    cd ~/Downloads
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
 }
 
 
@@ -190,4 +196,5 @@ setupSSHKeys
 #installPostgres
 #installOpenShot
 #installAudioRecorder
+installChrome
 showFinishingMessages
