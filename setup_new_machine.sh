@@ -99,8 +99,8 @@ function installDocker() {
 
     # sudo apt-get install -y docker.io docker-compose
 
-    MY_USER=${USER}
-    sudo usermod -aG docker $MY_USER
+    sudo usermod -aG docker $USER
+    newgrp docker
     MESSAGES="${MESSAGES}\nIn order for docker to work for anyone but root you need to reboot\e[0m"
 }
 
