@@ -101,6 +101,11 @@ function installDocker() {
 
     sudo usermod -aG docker $USER
     newgrp docker
+
+    grep DOCKER_HIDE_LEGACY_COMMANDS ~/.bashrc > /dev/null 2>&1 || {
+        echo 'export DOCKER_HIDE_LEGACY_COMMANDS=true' >> ~/.bashrc
+        MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin to hide docker legacy commands"
+    }
     MESSAGES="${MESSAGES}\nIn order for docker to work for anyone but root you need to reboot\e[0m"
 }
 
