@@ -186,6 +186,13 @@ function installChrome() {
     sudo dpkg -i google-chrome-stable_current_amd64.deb
 }
 
+function installSkype() {
+    which skypeforlinux > /dev/null && return
+    cd ~/Downloads
+    wget https://go.skype.com/skypeforlinux-64.deb
+    sudo apt install -y ./skypeforlinux-64.deb
+}
+
 
 installGit
 installBuildEssential
@@ -210,4 +217,5 @@ setupSSHKeys
 #installOpenShot
 #installAudioRecorder
 installChrome
+installSkype
 showFinishingMessages
