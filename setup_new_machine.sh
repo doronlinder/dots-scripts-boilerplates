@@ -107,6 +107,9 @@ function installDocker() {
         MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin to hide docker legacy commands"
     }
     MESSAGES="${MESSAGES}\nIn order for docker to work for anyone but root you need to reboot\e[0m"
+
+    # in case of problems with docker login helpers
+    # sudo apt-get remove golang-docker-credential-helpers
 }
 
 function showFinishingMessages() {
