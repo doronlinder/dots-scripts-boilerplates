@@ -1,4 +1,3 @@
-
 set nocompatible
 set nowrap nu smartindent
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
@@ -8,9 +7,11 @@ set path+=src/**
 set path+=js/**
 set path+=scripts/**
 set path+=styles/**
+
 set wildmenu
 set suffixesadd=.js
 set suffixesadd+=.json
+
 filetype plugin indent on
 
 set backup
@@ -35,4 +36,4 @@ inoremap \() () => {<CR>}));<ESC>kf)i
 
 " autocmd BufWritePre *.js %s/\s\+$//e
 
-colorscheme delek
+colorscheme slate
