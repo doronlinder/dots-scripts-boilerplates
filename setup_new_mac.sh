@@ -28,7 +28,7 @@ function installNvm() {
 
     source ~/.zshrc
     source ~/.oh-my-zsh/oh-my-zsh.sh
-    nvm ls 12 | grep 12 > /dev/null || nvm install 12 || echo -e "\e[1;91mNo NVM!!!\e[0m"
+    nvm ls 14 | grep 14 > /dev/null || nvm install 14 || echo -e "\e[1;91mNo NVM!!!\e[0m"
 }
 
 function installTmux() {
@@ -43,6 +43,10 @@ function installTree() {
 
 function installJq() {
     which jq > /dev/null || brew install jq
+}
+
+function installYarn() {
+    which yarn > /dev/null || npm install -g yarn
 }
 
 function installVimPrettier() {
@@ -102,6 +106,7 @@ fixHomebrewForZsh
 installTmux
 installTree
 installJq
+installYarn
 installVimPrettier
 setupProjectsDir
 setupDotFiles
