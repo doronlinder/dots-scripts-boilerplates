@@ -49,6 +49,10 @@ function installYarn() {
     which yarn > /dev/null || npm install -g yarn
 }
 
+function installDocker() {
+    which docker > /dev/null || brew install --cask docker
+}
+
 function installVimPrettier() {
     mkdir -p ~/.vim/pack/plugins/start
     [ -d ~/.vim/pack/plugins/start/vim-prettier ] || git clone https://github.com/prettier/vim-prettier ~/.vim/pack/plugins/start/vim-prettier
@@ -115,5 +119,6 @@ setupSSHKeys
 #installTypeScript
 #installYarn
 #installPostgres
+#installDocker
 
 showFinishingMessages
