@@ -106,7 +106,6 @@ fixHomebrewForZsh
 installTmux
 installTree
 installJq
-installYarn
 installVimPrettier
 setupProjectsDir
 setupDotFiles
@@ -114,6 +113,7 @@ setupAliases
 setupSSHKeys
 
 #installTypeScript
+#installYarn
 #installPostgres
 
 showFinishingMessages
