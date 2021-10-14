@@ -37,4 +37,6 @@ inoremap \() () => {<CR>}));<ESC>kf)i
 
 " autocmd BufWritePre *.js %s/\s\+$//e
 
-colorscheme slate
+colorscheme orbital
+"colorscheme tender
+"colorscheme sonokai

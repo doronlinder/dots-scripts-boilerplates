@@ -56,6 +56,7 @@ function installDocker() {
 function installVimPrettier() {
     mkdir -p ~/.vim/pack/plugins/start
     [ -d ~/.vim/pack/plugins/start/vim-prettier ] || git clone https://github.com/prettier/vim-prettier ~/.vim/pack/plugins/start/vim-prettier
+    [ -d ~/.vim/pack/plugins/start/awesome-vim-colorschemes ] || git clone https://github.com/rafi/awesome-vim-colorschemes.git ~/.vim/pack/plugins/start/awesome-vim-colorschemes
 }
 
 function setupProjectsDir() {
