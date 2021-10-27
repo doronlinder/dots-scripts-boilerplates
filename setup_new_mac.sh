@@ -53,10 +53,15 @@ function installDocker() {
     which docker > /dev/null || brew install --cask docker
 }
 
-function installVimPrettier() {
+function installVimPlugins() {
     mkdir -p ~/.vim/pack/plugins/start
     [ -d ~/.vim/pack/plugins/start/vim-prettier ] || git clone https://github.com/prettier/vim-prettier ~/.vim/pack/plugins/start/vim-prettier
-    [ -d ~/.vim/pack/plugins/start/awesome-vim-colorschemes ] || git clone https://github.com/rafi/awesome-vim-colorschemes.git ~/.vim/pack/plugins/start/awesome-vim-colorschemes
+    [ -d ~/.vim/pack/plugins/start/awesome-vim-colorschemes ] || git clone https://github.com/rafi/awesome-vim-colorschemes.git ~/.vim/pack/plugins/start/vim-prettier
+    [ -d ~/.vim/pack/plugins/start/typescript-vim ] || git clone https://github.com/leafgarland/typescript-vim.git ~/.vim/pack/plugins/start/typescript-vim
+    [ -d ~/.vim/pack/plugins/start/vim-javascript ] || git clone https://github.com/pangloss/vim-javascript.git ~/.vim/pack/plugins/start/vim-javascript
+    [ -d ~/.vim/pack/plugins/start/vim-jsx-pretty ] || git clone https://github.com/MaxMEllon/vim-jsx-pretty.git ~/.vim/pack/plugins/start/vim-jsx-pretty
+    [ -d ~/.vim/pack/plugins/start/vim-jsx-typescript ] || git clone https://github.com/peitalin/vim-jsx-typescript.git ~/.vim/pack/plugins/start/vim-jsx-typescript
+    [ -d ~/.vim/pack/plugins/start/vim-graphql ] || git clone https://github.com/jparise/vim-graphql.git ~/.vim/pack/plugins/start/vim-graphql
 }
 
 function setupProjectsDir() {
@@ -111,7 +116,7 @@ fixHomebrewForZsh
 installTmux
 installTree
 installJq
-installVimPrettier
+installVimPlugins
 setupProjectsDir
 setupDotFiles
 setupAliases
