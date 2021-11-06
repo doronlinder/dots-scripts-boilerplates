@@ -26,17 +26,12 @@ function installBuildEssential() {
 function installNvm() {
 
     if [ ! -d ~/.nvm ]; then
-        git clone https://github.com/creationix/nvm.git ~/.nvm && cd ~/.nvm && git checkout `git describe --abbrev=0 --tags`
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+        MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for nvm changes to take effect"
     fi
 
-    grep nvm ~/.bashrc > /dev/null 2>&1 || {
-        echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc
-        echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm' >> ~/.bashrc
-        MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for nvm changes to take effect"
-    }
-
-    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-    nvm ls 10 | grep 10 > /dev/null || nvm install 10 || echo -e "\e[1;91mNo NVM!!!\e[0m"
+    source ~/.nvm/nvm.sh
+    nvm ls 14 | grep 14 > /dev/null || nvm install 14 || echo -e "\e[1;91mNo NVM!!!\e[0m"
 }
 
 function installHeroku() {
@@ -183,7 +178,7 @@ function installAudioRecorder() {
 }
 
 function installChrome() {
-    which google-chrome > /dev/null && return
+    which google-chrome-stable > /dev/null && return
     cd ~/Downloads
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     sudo dpkg -i google-chrome-stable_current_amd64.deb
@@ -199,12 +194,12 @@ function installSkype() {
 
 installGit
 installBuildEssential
-installNvm
 installTmux
 installTree
 installCurl
 installJq
 installVimAndPlugged
+installNvm
 #installHeroku
 setupProjectsDir
 setupDotFiles
