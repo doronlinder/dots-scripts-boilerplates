@@ -146,6 +146,11 @@ function setupSSHKeys() {
     ssh-keygen -t rsa -b 4096 -C "${sshemail}"
     MESSAGES="${MESSAGES}\nAdd new ssh keys to github and gitlab.\e[0m"
   fi
+
+  # OR
+  # copy files into ~/.ssh
+  # chmod 0600 /home/doron/.ssh/id_rsa*
+  # ssh-add
 }
 
 function installObsStudio() {
