@@ -23,15 +23,19 @@ let g:netrw_banner=0
 let g:netrw_liststyle=3
 " let g:netrw_list_hide= netrw_gitignore#Hide() . '*.sw?'
 
-call plug#begin('~/.vim/plugged')
-Plug 'prettier/vim-prettier', { 'do': 'npm install' }                                                                                             
-Plug 'rafi/awesome-vim-colorschemes'                                                                                                              
-Plug 'leafgarland/typescript-vim'                                                                                                                 
-Plug 'pangloss/vim-javascript'                                                                                                                    
-Plug 'MaxMEllon/vim-jsx-pretty'                                                                                                                   
-Plug 'peitalin/vim-jsx-typescript'                                                                                                                
-Plug 'jparise/vim-graphql'
-call plug#end()
+call plug#begin('~/.vim/plugged')                                                   
+Plug 'prettier/vim-prettier', { 'do': 'npm install' }                               
+Plug 'rafi/awesome-vim-colorschemes'                                                
+Plug 'leafgarland/typescript-vim'                                                   
+Plug 'pangloss/vim-javascript'                                                      
+Plug 'MaxMEllon/vim-jsx-pretty'                                                     
+Plug 'peitalin/vim-jsx-typescript'                                                  
+Plug 'jparise/vim-graphql'                                                          
+Plug 'neoclide/coc.nvim', {'branch': 'release'}                                     
+let g:coc_global_extensions = [                                                     
+  \ 'coc-tsserver'                                                                  
+  \ ]                                                                               
+call plug#end()    
 
 nnoremap Q <nop>
 nmap <Leader>p <Plug>(Prettier)
@@ -45,5 +49,10 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 " inoremap \() () => {<CR>}));<ESC>kf)i
 
 " autocmd BufWritePre *.js %s/\s\+$//e
+
+nmap <silent> gd <Plug>(coc-definition)                                             
+nmap <silent> gy <Plug>(coc-type-definition)                                        
+nmap <silent> gi <Plug>(coc-implementation)                                         
+nmap <silent> gr <Plug>(coc-references)
 
 colorscheme orbital
