@@ -117,7 +117,10 @@ function setupAliases() {
 alias gs='git status'
 alias gd='git diff'
 alias sgrep='grep -r --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=public --exclude-dir=lib --exclude-dir=dist'
-alias int='npm run $(jq --raw-output ".scripts | keys[]" package.json | grep int | grep -v lint)'
+
+function aliases() {
+    vi ~/.bash_aliases && source ~/.bashrc && echo 'Aliases updated!'
+}
 BASH_ALIASES
     MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for aliases changes to take effect"
 }
@@ -196,6 +199,14 @@ function installSkype() {
     sudo apt install -y ./skypeforlinux-64.deb
 }
 
+function setupMicrosoftFonts() {
+    fc-list -q "Comis Sans" && return
+
+    sudo add-apt-repository multiverse
+    sudo apt install -y ttf-mscorefonts-installer
+    sudo fc-cache -f -v
+}
+
 
 installGit
 installBuildEssential
@@ -221,4 +232,5 @@ setupSSHKeys
 #installAudioRecorder
 installChrome
 installSkype
+#setupMicrosoftFonts
 showFinishingMessages
