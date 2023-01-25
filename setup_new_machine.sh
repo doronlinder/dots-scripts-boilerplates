@@ -23,15 +23,23 @@ function installBuildEssential() {
     which make > /dev/null || sudo apt-get install -y build-essential
 }
 
-function installNvm() {
+# function installNvm() {
+#
+#     if [ ! -d ~/.nvm ]; then
+#         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+#         MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for nvm changes to take effect"
+#     fi
+#
+#     source ~/.nvm/nvm.sh
+#     nvm ls 14 | grep 14 > /dev/null || nvm install 14 || echo -e "\e[1;91mNo NVM!!!\e[0m"
+# }
 
-    if [ ! -d ~/.nvm ]; then
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-        MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for nvm changes to take effect"
-    fi
-
-    source ~/.nvm/nvm.sh
-    nvm ls 14 | grep 14 > /dev/null || nvm install 14 || echo -e "\e[1;91mNo NVM!!!\e[0m"
+function installVolta() {
+  if ! which volta > /dev/null; then
+    curl https://get.volta.sh | bash
+    source ~/.bashrc
+    volta install node
+  fi
 }
 
 function installHeroku() {
@@ -74,6 +82,7 @@ function setupDotFiles() {
     git clone https://github.com/doronlinder/dots-scripts-boilerplates.git
     cd dots-scripts-boilerplates
     cp .vimrc ~/.
+    cp .vimrc-coc ~/.
     cp .tmux.conf ~/.
 }
 
@@ -136,6 +145,11 @@ function installAngularCLI() {
 }
 
 function setupKeyboardMapping() {
+    # This doesn't exist on the server, so we probably don't want to install this
+    # setxkbmap tries to connect to DISPLAY...
+    # if ! which setxkbmap > dev/null; then
+    #   sudo apt-get install -y x11-xkb-utils
+    # fi
     grep setxkbmap ~/.bashrc > /dev/null 2>&1 || {
         echo 'setxkbmap -option grp:switch,grp:alt_shift_toggle,grp_led:scroll,caps:escape gb,il' >> ~/.bashrc
         MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for keyboard mapping changes to take effect"
@@ -215,7 +229,8 @@ installTree
 installCurl
 installJq
 installVimAndPlugged
-installNvm
+#installNvm
+installVolta
 #installHeroku
 setupProjectsDir
 setupDotFiles
