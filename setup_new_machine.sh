@@ -14,7 +14,7 @@ function installGit() {
                 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
             }
         
-            export PS1='\[\033[34m\]\h\[\033[33m\] \[\033[32m\]\W\[\033[33m\] \$(parse_git_branch)\[\033[00m\] $ '
+            export PS1='\[\033[34m\]\h\[\033[33m\] \[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ '
 GIT_PS1_BASH_RC
       MESSAGES="${MESSAGES}\nSource ~/.bashrc to have git supported PS1"
     fi
