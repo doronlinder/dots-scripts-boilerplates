@@ -147,7 +147,7 @@ function installAngularCLI() {
 function setupKeyboardMapping() {
     # This doesn't exist on the server, so we probably don't want to install this
     # setxkbmap tries to connect to DISPLAY...
-    # if ! which setxkbmap > dev/null; then
+    # if ! which setxkbmap > /dev/null; then
     #   sudo apt-get install -y x11-xkb-utils
     # fi
     grep setxkbmap ~/.bashrc > /dev/null 2>&1 || {
