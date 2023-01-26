@@ -3,20 +3,21 @@ set -e
 MESSAGES=""
 
 function installGit() {
-    which git > /dev/null && return
-    sudo apt-get install -y git
+    if ! which git > /dev/null; then
+      sudo apt-get install -y git
+      MESSAGES="${MESSAGES}\nCreate an ssh cert for github"
+    fi
     
-    grep parse_git_branch ~/.bashrc > /dev/null 2>&1 || {
+    if ! grep parse_git_branch ~/.bashrc > /dev/null 2>&1; then
         cat >> ~/.bashrc <<-GIT_PS1_BASH_RC
             function parse_git_branch {
                 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
             }
         
-            export PS1='\u@\h \[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ '
+            export PS1='\[\033[34m\]\h\[\033[33m\] \[\033[32m\]\W\[\033[33m\] \$(parse_git_branch)\[\033[00m\] $ '
 GIT_PS1_BASH_RC
-    }
-
-    MESSAGES="${MESSAGES}\nCreate an ssh cert for github"
+      MESSAGES="${MESSAGES}\nSource ~/.bashrc to have git supported PS1"
+    fi
 }
 
 function installBuildEssential() {
@@ -69,6 +70,11 @@ function installVimAndPlugged() {
         curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
             https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
         MESSAGES="${MESSAGES}\nRun PlugInstall in vim.\e[0m"
+    fi
+
+    if ! grep 'export EDITOR=' ~/.bashrc > /dev/null 2>&1; then
+        echo 'export EDITOR=vim' >> ~/.bashrc
+        MESSAGES="${MESSAGES}\nSource ~/.bashrc to have vim as the defaul EDITOR"
     fi
 }
 
@@ -221,6 +227,7 @@ function setupMicrosoftFonts() {
     sudo fc-cache -f -v
 }
 
+# ---=== Must install always ===---
 
 installGit
 installBuildEssential
@@ -229,23 +236,30 @@ installTree
 installCurl
 installJq
 installVimAndPlugged
-#installNvm
 installVolta
-#installHeroku
 setupProjectsDir
 setupDotFiles
 setupAliases
-setupKeyboardMapping
-#installJavaAndMaven
+#setupSSHKeys
 #installDocker
-#installTypeScript
-#installAngularCLI
-setupSSHKeys
+
+# ---=== Desktop only ===---
+
+#setupKeyboardMapping
+#installChrome
+#installSkype
+#setupMicrosoftFonts
 #installObsStudio
-#installPostgres
 #installOpenShot
 #installAudioRecorder
-installChrome
-installSkype
-#setupMicrosoftFonts
+
+# ---=== Deprecated workflows ===---
+
+#installNvm
+#installHeroku
+#installJavaAndMaven
+#installAngularCLI
+#installTypeScript
+#installPostgres
+
 showFinishingMessages
