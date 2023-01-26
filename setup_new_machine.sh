@@ -24,6 +24,10 @@ function installBuildEssential() {
     which make > /dev/null || sudo apt-get install -y build-essential
 }
 
+function installNetTools() {
+    which netstat > /dev/null || sudo apt-get install -y net-tools
+}
+
 # function installNvm() {
 #
 #     if [ ! -d ~/.nvm ]; then
@@ -231,6 +235,7 @@ function setupMicrosoftFonts() {
 
 installGit
 installBuildEssential
+installNetTools
 installTmux
 installTree
 installCurl
