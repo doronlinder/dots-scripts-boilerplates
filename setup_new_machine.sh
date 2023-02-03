@@ -80,6 +80,8 @@ function installVimAndPlugged() {
         echo 'export EDITOR=vim' >> ~/.bashrc
         MESSAGES="${MESSAGES}\nSource ~/.bashrc to have vim as the defaul EDITOR"
     fi
+
+    which rg > /dev/null || sudo apt-get install -y ripgrep
 }
 
 function setupProjectsDir() {

@@ -5,6 +5,7 @@ set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 set encoding=utf-8
 set nobackup
 set nowritebackup
+set noswapfile
 set dir=/tmp//
 
 set path+=public/**
