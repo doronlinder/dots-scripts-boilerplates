@@ -234,7 +234,7 @@ function setupMicrosoftFonts() {
 }
 
 function installPHPAndComposer() {
-    which php > /dev/null || sudo apt-get install -y php
+    which php > /dev/null || sudo apt-get install -y php php-curl php-mbstring unzip php-zip
 
     if ! which composer > /dev/null; then
       # Taken from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
