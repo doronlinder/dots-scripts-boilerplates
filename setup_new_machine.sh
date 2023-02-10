@@ -233,6 +233,29 @@ function setupMicrosoftFonts() {
     sudo fc-cache -f -v
 }
 
+function installPHPAndComposer() {
+    which php > /dev/null || sudo apt-get install -y php
+
+    if ! which composer > /dev/null; then
+      # Taken from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+      local EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
+      php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+      local ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+      if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]
+      then
+        >&2 echo 'ERROR: Invalid installer checksum'
+        rm composer-setup.php
+        exit 1
+      fi
+
+      php composer-setup.php --quiet
+      rm composer-setup.php
+
+      sudo mv composer.phar /usr/local/bin/composer
+    fi
+}
+
 # ---=== Must install always ===---
 
 installGit
@@ -249,6 +272,7 @@ setupDotFiles
 setupAliases
 #setupSSHKeys
 #installDocker
+installPHPAndComposer
 
 # ---=== Desktop only ===---
 
