@@ -234,7 +234,14 @@ function setupMicrosoftFonts() {
 }
 
 function installPHPAndComposer() {
-    which php > /dev/null || sudo apt-get install -y php php-curl php-mbstring unzip php-zip
+    which php > /dev/null || sudo apt-get install -y php unzip php-zip
+
+    # For PDF image support
+    php -i | grep 'GD Support' | grep enabled > /dev/null || sudo apt-get -y install php-gd
+    # For sendgrid email client
+    php -i | grep 'mbstring' | grep enabled  > /dev/null || sudo apt-get -y install php-mbstring
+    # For sendgrid email client
+    php -i | grep 'curl' > /dev/null || sudo apt-get -y install php-curl
 
     if ! which composer > /dev/null; then
       # Taken from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
