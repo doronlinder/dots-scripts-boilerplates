@@ -256,6 +256,10 @@ function installPHPAndComposer() {
     fi
 }
 
+function installMysqlClient() {
+    which mysql > /dev/null || sudo apt-get install -y mysql-client
+}
+
 # ---=== Must install always ===---
 
 installGit
@@ -273,6 +277,7 @@ setupAliases
 #setupSSHKeys
 #installDocker
 installPHPAndComposer
+installMysqlClient
 
 # ---=== Desktop only ===---
 
