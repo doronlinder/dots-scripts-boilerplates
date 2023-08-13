@@ -269,6 +269,22 @@ function installMysqlClient() {
     which mysql > /dev/null || sudo apt-get install -y mysql-client
 }
 
+function installDisplayLinkDriver() {
+    sudo apt-cache show displaylink-driver > /dev/null 2>&1 && return
+
+    # Based on the instructions on
+    # https://www.synaptics.com/products/displaylink-graphics/downloads/ubuntu
+    # Still needs to be tested after clean install
+
+    cd ~/Downloads
+    wget https://www.synaptics.com/sites/default/files/Ubuntu/pool/stable/main/all/synaptics-repository-keyring.deb
+    sudo apt-get install -y synaptics-repository-keyring.deb
+    sudo apt update -y
+    sudo apt-get install -y displaylink-driver
+
+    MESSAGES="${MESSAGES}\nReboot the machine for displaylink-driver to work"
+}
+
 # ---=== Must install always ===---
 
 installGit
@@ -297,6 +313,7 @@ installMysqlClient
 #installObsStudio
 #installOpenShot
 #installAudioRecorder
+#installDisplayLinkDriver
 
 # ---=== Deprecated workflows ===---
 
