@@ -84,6 +84,25 @@ function installVimAndPlugged() {
     which rg > /dev/null || sudo apt-get install -y ripgrep
 }
 
+function installNeoVim() {
+
+    which nvim > /dev/null && return
+
+    if [ ! -d ~/nvim-linux64 ]; then
+      cd ~
+      rm -f ~/nvim-linux64.tar.gz
+      wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+      tar -xvzf ~/nvim-linux64.tar.gz
+    fi
+
+    sudo ln -s ~/nvim-linux64/bin/nvim /usr/bin/nvim
+
+    if ! grep 'export EDITOR=n' ~/.bashrc > /dev/null 2>&1; then
+        echo 'export EDITOR=nvim' >> ~/.bashrc
+        MESSAGES="${MESSAGES}\nSource ~/.bashrc to have NEO vim as the defaul EDITOR"
+    fi
+}
+
 function setupProjectsDir() {
     mkdir -p ~/projects
 }
@@ -296,13 +315,17 @@ installCurl
 installJq
 installVimAndPlugged
 installVolta
+installNeoVim
 setupProjectsDir
 setupDotFiles
 setupAliases
 #setupSSHKeys
 #installDocker
-installPHPAndComposer
-installMysqlClient
+
+# ---=== Cloud Dev ===---
+
+#installPHPAndComposer
+#installMysqlClient
 
 # ---=== Desktop only ===---
 
