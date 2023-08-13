@@ -242,6 +242,8 @@ function installPHPAndComposer() {
     php -i | grep 'mbstring' | grep enabled  > /dev/null || sudo apt-get -y install php-mbstring
     # For sendgrid email client
     php -i | grep 'curl' > /dev/null || sudo apt-get -y install php-curl
+    # For PDO support
+    php -i | grep 'pdo_mysql' > /dev/null || sudo apt-get -y install php-pdo-mysql
 
     if ! which composer > /dev/null; then
       # Taken from https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
