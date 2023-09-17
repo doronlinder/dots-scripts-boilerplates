@@ -98,6 +98,13 @@ function installNeoVim() {
 
       # Change <leader>gf to Ctrl-P
       sed -i -e '/<leader>gf/s/<leader>gf/<C-p>/' -e 's/Search \[G\]it \[F\]iles/Ctrl-P/' ~/.config/nvim/init.lua
+
+      # Uncomment the typescript language server to install it
+      sed -i -e '/tsserver/s/-- //' ~/.config/nvim/init.lua
+
+      # Map <leader>p to Prettify (:Format buffer with LSP)
+      sed -i -e '/Format current buffer with LSP/a\\n\ \ nmap('\''<leader>p'\'', '\'':Format<CR>'\'', '\''Prettier current buffer'\'')' ~/.config/nvim/init.lua
+
     fi
 }
 
