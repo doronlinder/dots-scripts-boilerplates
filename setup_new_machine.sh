@@ -28,27 +28,12 @@ function installNetTools() {
     which netstat > /dev/null || sudo apt-get install -y net-tools
 }
 
-# function installNvm() {
-#
-#     if [ ! -d ~/.nvm ]; then
-#         curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-#         MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for nvm changes to take effect"
-#     fi
-#
-#     source ~/.nvm/nvm.sh
-#     nvm ls 14 | grep 14 > /dev/null || nvm install 14 || echo -e "\e[1;91mNo NVM!!!\e[0m"
-# }
-
 function installVolta() {
   if ! which volta > /dev/null; then
     curl https://get.volta.sh | bash
     source ~/.bashrc
     volta install node
   fi
-}
-
-function installHeroku() {
-    which heroku > /dev/null || sudo snap install heroku --classic
 }
 
 function installTmux() {
@@ -86,20 +71,33 @@ function installVimAndPlugged() {
 
 function installNeoVim() {
 
-    which nvim > /dev/null && return
-
-    if [ ! -d ~/nvim-linux64 ]; then
-      cd ~
-      rm -f ~/nvim-linux64.tar.gz
-      wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-      tar -xvzf ~/nvim-linux64.tar.gz
+    # Install nvim
+    if ! which nvim > /dev/null 2>&1; then
+      if [ ! -d ~/nvim-linux64 ]; then
+        cd ~
+        rm -f ~/nvim-linux64.tar.gz
+        wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+        tar -xvzf ~/nvim-linux64.tar.gz
+        rm -f ~/nvim-linux64.tar.gz
+      fi
+      sudo ln -s ~/nvim-linux64/bin/nvim /usr/bin/nvim
     fi
 
-    sudo ln -s ~/nvim-linux64/bin/nvim /usr/bin/nvim
-
+    # Set as default EDITOR
     if ! grep 'export EDITOR=n' ~/.bashrc > /dev/null 2>&1; then
         echo 'export EDITOR=nvim' >> ~/.bashrc
         MESSAGES="${MESSAGES}\nSource ~/.bashrc to have NEO vim as the defaul EDITOR"
+    fi
+
+    # Use nvim kickstart as a baseline configuration
+    if [ ! -d ~/.config/nvim ]; then
+
+      which rg > /dev/null || sudo apt-get install -y ripgrep
+      git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+      nvim --headless "+Lazy! sync" +qa
+
+      # Change <leader>gf to Ctrl-P
+      sed -i -e '/<leader>gf/s/<leader>gf/<C-p>/' -e 's/Search \[G\]it \[F\]iles/Ctrl-P/' ~/.config/nvim/init.lua
     fi
 }
 
@@ -115,13 +113,6 @@ function setupDotFiles() {
     cp .vimrc ~/.
     cp .vimrc-coc ~/.
     cp .tmux.conf ~/.
-}
-
-function installJavaAndMaven() {
-    which mvn > /dev/null && return
-    sudo apt-get install -y maven
-    sudo apt-get install -y openjdk-8-jdk-headless
-    MESSAGES="${MESSAGES}\nRun mvn once and then copy maven repository settings with scp from other machine's ~/.m2/settings.xml"
 }
 
 function installDocker() {
@@ -163,16 +154,6 @@ function aliases() {
 }
 BASH_ALIASES
     MESSAGES="${MESSAGES}\nsource ~/.bashrc or relogin for aliases changes to take effect"
-}
-
-function installTypeScript() {
-    which tsc > /dev/null && return
-    npm install -g typescript
-}
-
-function installAngularCLI() {
-    npm ls -g @angular/cli > /dev/null 2>&1 && return
-    npm install -g @angular/cli
 }
 
 function setupKeyboardMapping() {
@@ -340,11 +321,6 @@ setupAliases
 
 # ---=== Deprecated workflows ===---
 
-#installNvm
-#installHeroku
-#installJavaAndMaven
-#installAngularCLI
-#installTypeScript
 #installPostgres
 
 showFinishingMessages
