@@ -105,6 +105,9 @@ function installNeoVim() {
       # Map <leader>p to Prettify (:Format buffer with LSP)
       sed -i -e '/Format current buffer with LSP/a\\n\ \ nmap('\''<leader>p'\'', '\'':Format<CR>'\'', '\''Prettier current buffer'\'')' ~/.config/nvim/init.lua
 
+      # Add - to the definition of a word
+      sed -i -e '/modeline/i vim.opt.iskeyword:append('\''-'\'')\n' ~/.config/nvim/init.lua
+
     fi
 }
 
