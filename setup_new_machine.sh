@@ -108,6 +108,9 @@ function installNeoVim() {
       # Add - to the definition of a word
       sed -i -e '/modeline/i vim.opt.iskeyword:append('\''-'\'')\n' ~/.config/nvim/init.lua
 
+      # Remove indentation guides and context highlighting
+      sed -i -e "/main = 'ibl'/{ N ; c \ \ \ \ main = 'ibl',\n    opts = { enabled = false, scope = { enabled = false } },"$'\n'"}" ~/.config/nvim/init.lua
+
     fi
 }
 
