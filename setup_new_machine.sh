@@ -94,6 +94,37 @@ function installNeoVim() {
       # Remove indentation guides and context highlighting
       sed -i -e "/main = 'ibl'/{ N ; c \ \ \ \ main = 'ibl',\n    opts = { enabled = false, scope = { enabled = false } },"$'\n'"}" ~/.config/nvim/init.lua
 
+      # Add nvim-tree
+      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<NVIMTREE
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end,
+  },
+NVIMTREE
+    } | tr '"' "'" ) ~/.config/nvim/init.lua
+
+      # Disable netrw and add keymap Leader-E for nvim-tree
+      sed -i -e '/maplocalleader / r '<( cat <<NO_NETRW
+
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- set termguicolors to enable highlight groups
+vim.opt.termguicolors = true
+NO_NETRW
+      ) ~/.config/nvim/init.lua
+
+      # Map <leader>f to toogle nvim tree
+      sed -i -e '/Diagnostic keymaps/i\-- NvimTree keymaps\nvim.keymap.set('\''n'\'','\''<leader>f'\'', '\'':NvimTreeToggle<CR>'\'', { desc = '\''Open [f]ile project tree'\'' })' ~/.config/nvim/init.lua
+
     fi
 }
 
