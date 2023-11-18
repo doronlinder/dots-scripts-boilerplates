@@ -52,23 +52,6 @@ function installCurl() {
     which curl > /dev/null || sudo apt-get install -y curl
 }
 
-function installVimAndPlugged() {
-
-    which vim > /dev/null || sudo apt-get install -y vim
-    if [ ! -f ~/.vim/autoload/plug.vim ]; then
-        curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-            https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-        MESSAGES="${MESSAGES}\nRun PlugInstall in vim.\e[0m"
-    fi
-
-    if ! grep 'export EDITOR=' ~/.bashrc > /dev/null 2>&1; then
-        echo 'export EDITOR=vim' >> ~/.bashrc
-        MESSAGES="${MESSAGES}\nSource ~/.bashrc to have vim as the defaul EDITOR"
-    fi
-
-    which rg > /dev/null || sudo apt-get install -y ripgrep
-}
-
 function installNeoVim() {
 
     # Install nvim
@@ -123,8 +106,6 @@ function setupDotFiles() {
     cd ~/projects
     git clone https://github.com/doronlinder/dots-scripts-boilerplates.git
     cd dots-scripts-boilerplates
-    cp .vimrc ~/.
-    cp .vimrc-coc ~/.
     cp .tmux.conf ~/.
 }
 
@@ -307,7 +288,6 @@ installTmux
 installTree
 installCurl
 installJq
-installVimAndPlugged
 installVolta
 installNeoVim
 setupProjectsDir
