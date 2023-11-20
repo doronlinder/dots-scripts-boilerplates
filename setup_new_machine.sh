@@ -7,13 +7,13 @@ function installGit() {
       sudo apt-get install -y git
       MESSAGES="${MESSAGES}\nCreate an ssh cert for github"
     fi
-    
+
     if ! grep parse_git_branch ~/.bashrc > /dev/null 2>&1; then
         cat >> ~/.bashrc <<-GIT_PS1_BASH_RC
             function parse_git_branch {
                 git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
             }
-        
+
             export PS1='\[\033[34m\]\h\[\033[33m\] \[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ '
 GIT_PS1_BASH_RC
       MESSAGES="${MESSAGES}\nSource ~/.bashrc to have git supported PS1"
@@ -72,6 +72,11 @@ function installNeoVim() {
         MESSAGES="${MESSAGES}\nSource ~/.bashrc to have NEO vim as the defaul EDITOR"
     fi
 
+    if [ ! -z "$NVIM_SETUP" ]; then
+        rm -rf ~/.config/nvim
+        rm -rf ~/.local/share/nvim
+    fi
+
     # Use nvim kickstart as a baseline configuration
     if [ ! -d ~/.config/nvim ]; then
 
@@ -84,9 +89,12 @@ function installNeoVim() {
 
       # Uncomment the typescript language server to install it
       sed -i -e '/tsserver/s/-- //' ~/.config/nvim/init.lua
+      # Install prettierd in Mason - doesn't work
+      # Look into https://github.com/jay-babu/mason-null-ls.nvim
+      # sed -i -e '/tsserver/a  prettierd = {},' ~/.config/nvim/init.lua
 
       # Map <leader>p to Prettify (:Format buffer with LSP)
-      sed -i -e '/Format current buffer with LSP/a\\n\ \ nmap('\''<leader>p'\'', '\'':Format<CR>'\'', '\''Prettier current buffer'\'')' ~/.config/nvim/init.lua
+      sed -i -e '/Format current buffer with LSP/a\\n\ \ nmap('\''<leader>p'\'', '\'':%!prettierd %<CR>'\'', '\''Prettier current buffer'\'')' ~/.config/nvim/init.lua
 
       # Add - to the definition of a word
       sed -i -e '/modeline/i vim.opt.iskeyword:append('\''-'\'')\n' ~/.config/nvim/init.lua
