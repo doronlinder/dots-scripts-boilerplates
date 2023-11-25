@@ -72,7 +72,7 @@ function installNeoVim() {
         MESSAGES="${MESSAGES}\nSource ~/.bashrc to have NEO vim as the defaul EDITOR"
     fi
 
-    if [ ! -z "$NVIM_SETUP" ]; then
+    if [ ! -z "$RENEW_NVIM_SETUP" ]; then
         rm -rf ~/.config/nvim
         rm -rf ~/.local/share/nvim
     fi
@@ -132,6 +132,30 @@ NO_NETRW
 
       # Map <leader>f to toogle nvim tree
       sed -i -e '/Diagnostic keymaps/i\-- NvimTree keymaps\nvim.keymap.set('\''n'\'','\''<leader>f'\'', '\'':NvimTreeToggle<CR>'\'', { desc = '\''Open [f]ile project tree'\'' })' ~/.config/nvim/init.lua
+
+      # Add nvim-tree
+      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<HARPOON
+  {
+    'ThePrimeagen/harpoon',
+    lazy = false,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    config = true,
+    keys = {
+      { '<leader>ha', '<cmd>lua require("harpoon.mark").add_file()<cr>', desc = 'Add file to harpoon' },
+      { '<leader>hr', '<cmd>lua require("harpoon.mark").rm_file()<cr>', desc = 'Remove file from harpoon' },
+      { '<leader>hn', '<cmd>lua require("harpoon.ui").nav_next()<cr>', desc = 'Go to next harpoon mark' },
+      { '<leader>hp', '<cmd>lua require("harpoon.ui").nav_prev()<cr>', desc = 'Go to previous harpoon mark' },
+      { '<leader>hm', '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>', desc = 'Show harpoon marks' },
+      { '<leader>h1', '<cmd>lua require("harpoon.ui").nav_file(1)<cr>', desc = 'Go to harpoon file 1' },
+      { '<leader>h2', '<cmd>lua require("harpoon.ui").nav_file(2)<cr>', desc = 'Go to harpoon file 2' },
+      { '<leader>h3', '<cmd>lua require("harpoon.ui").nav_file(3)<cr>', desc = 'Go to harpoon file 3' },
+      { '<leader>h4', '<cmd>lua require("harpoon.ui").nav_file(4)<cr>', desc = 'Go to harpoon file 4' },
+    },
+  },
+HARPOON
+      } ) ~/.config/nvim/init.lua
 
     fi
 }
