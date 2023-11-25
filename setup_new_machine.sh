@@ -133,7 +133,7 @@ NO_NETRW
       # Map <leader>f to toogle nvim tree
       sed -i -e '/Diagnostic keymaps/i\-- NvimTree keymaps\nvim.keymap.set('\''n'\'','\''<leader>f'\'', '\'':NvimTreeToggle<CR>'\'', { desc = '\''Open [f]ile project tree'\'' })' ~/.config/nvim/init.lua
 
-      # Add nvim-tree
+      # Add harpoon
       sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<HARPOON
   {
     'ThePrimeagen/harpoon',
@@ -155,6 +155,21 @@ NO_NETRW
     },
   },
 HARPOON
+      } ) ~/.config/nvim/init.lua
+
+      # Add leap
+      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<LEAP
+  {
+    'ggandor/leap.nvim',
+    init = function()
+      require('leap').add_default_mappings()
+    end,
+    dependencies = {
+      'tpope/vim-repeat',
+    },
+    lazy = false,
+  },
+LEAP
       } ) ~/.config/nvim/init.lua
 
     fi
