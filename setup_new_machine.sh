@@ -173,6 +173,9 @@ LEAP
       } ) ~/.config/nvim/init.lua
 
     fi
+
+    # Set telescope to path_display to 'smart'
+    sed -i -e '/require('\''telescope'\'').setup {/ { n; a\ \ \ \ path_display = { "smart" },'$'\n''}' ~/.config/nvim/init.lua
 }
 
 function setupProjectsDir() {
