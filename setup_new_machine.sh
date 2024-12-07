@@ -157,21 +157,6 @@ NO_NETRW
 HARPOON
       } ) ~/.config/nvim/init.lua
 
-      # Add leap
-      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<LEAP
-  {
-    'ggandor/leap.nvim',
-    init = function()
-      require('leap').add_default_mappings()
-    end,
-    dependencies = {
-      'tpope/vim-repeat',
-    },
-    lazy = false,
-  },
-LEAP
-      } ) ~/.config/nvim/init.lua
-
     fi
 
     # Set telescope to path_display to 'smart'
