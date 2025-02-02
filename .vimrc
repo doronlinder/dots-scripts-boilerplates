@@ -20,12 +20,16 @@ filetype plugin indent on
 " set termguicolors
 set t_ut=
 
+" for quick vim-gitgutter updates
+set updatetime=100
+
 let g:netrw_banner=0
 let g:netrw_liststyle=3
 " let g:netrw_list_hide= netrw_gitignore#Hide() . '*.sw?'
 
 call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-fugitive',
+Plug 'airblade/vim-gitgutter',
 Plug 'prettier/vim-prettier', { 'do': 'npm install' }
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'leafgarland/typescript-vim'
