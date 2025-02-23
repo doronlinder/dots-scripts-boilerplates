@@ -67,6 +67,13 @@ function installVimAndPlugged() {
     fi
 
     which rg > /dev/null || sudo apt-get install -y ripgrep
+
+    # To have syntax highlighting in :GitFiles
+    if ! which batcat > /dev/null; then
+        sudo apt-get install bat
+        # mkdir -p ~/.local/bin
+        # ln -s /usr/bin/batcat ~/.local/bin/bat
+    fi
 }
 
 function installNeoVim() {
