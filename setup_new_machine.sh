@@ -32,8 +32,15 @@ function installVolta() {
   if ! which volta > /dev/null; then
     curl https://get.volta.sh | bash
     source ~/.bashrc
-    volta install node
+    source ~/.profile
+    ~/.volta/bin/volta install node
   fi
+}
+
+function uninstallVolta() {
+    rm -rf ~/.volta
+    sed -i '/volta/I d' ~/.bashrc
+    sed -i '/volta/I d' ~/.profile
 }
 
 function installTmux() {
@@ -80,14 +87,17 @@ function installNeoVim() {
 
     # Install nvim
     if ! which nvim > /dev/null 2>&1; then
-      if [ ! -d ~/nvim-linux64 ]; then
+      if [ ! -d ~/nvim-linux-x86_64 ]; then
         cd ~
-        rm -f ~/nvim-linux64.tar.gz
-        wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
-        tar -xvzf ~/nvim-linux64.tar.gz
-        rm -f ~/nvim-linux64.tar.gz
+        rm -f ~/nvim-linux-x86_64.tar.gz
+        # Last updated script for this version
+        wget https://github.com/neovim/neovim/releases/download/v0.11.2/nvim-linux-x86_64.tar.gz
+        # But we can try taking the latest
+        # wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+        tar -xvzf ~/nvim-linux-x86_64.tar.gz
+        rm -f ~/nvim-linux-x86_64.tar.gz
       fi
-      sudo ln -s ~/nvim-linux64/bin/nvim /usr/bin/nvim
+      sudo ln -s ~/nvim-linux-x86_64/bin/nvim /usr/bin/nvim
     fi
 
     # Set as default EDITOR
@@ -105,86 +115,124 @@ function installNeoVim() {
     if [ ! -d ~/.config/nvim ]; then
 
       which rg > /dev/null || sudo apt-get install -y ripgrep
+      which unzip > /dev/null || sudo apt-get install -y unzip
+
       git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+      # latest hash I updated the script to
+      cd "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+      git checkout 3338d3920620861f8313a2745fd5d2be39f39534
+      cd -
       nvim --headless "+Lazy! sync" +qa
 
-      # Change <leader>gf to Ctrl-P
-      sed -i -e '/<leader>gf/s/<leader>gf/<C-p>/' -e 's/Search \[G\]it \[F\]iles/Ctrl-P/' ~/.config/nvim/init.lua
+      # Add support for Ctrl-P as git files
+      sed -i -e '/<leader><leader>/i\ \ \ \ \ \ vim.keymap.set('\''n'\'', '\''<C-p>'\'', builtin.git_files, { desc = '\''Git files (Ctrl-P)'\'' })' ~/.config/nvim/init.lua
 
-      # Uncomment the typescript language server to install it
-      sed -i -e '/tsserver/s/-- //' ~/.config/nvim/init.lua
-      # Install prettierd in Mason - doesn't work
-      # Look into https://github.com/jay-babu/mason-null-ls.nvim
-      # sed -i -e '/tsserver/a  prettierd = {},' ~/.config/nvim/init.lua
+      # Change grd (goto definition) to gd
+      sed -i -e '/lsp_definitions/s/grd/gd/' ~/.config/nvim/init.lua
 
-      # Map <leader>p to Prettify (:Format buffer with LSP)
-      sed -i -e '/Format current buffer with LSP/a\\n\ \ nmap('\''<leader>p'\'', '\'':%!prettierd %<CR>'\'', '\''Prettier current buffer'\'')' ~/.config/nvim/init.lua
+      # Support typescript language server out of the box
+      sed -i -e '/-- ts_ls = {}/s/-- //' ~/.config/nvim/init.lua
 
-      # Add - to the definition of a word
-      sed -i -e '/modeline/i vim.opt.iskeyword:append('\''-'\'')\n' ~/.config/nvim/init.lua
-
-      # Remove indentation guides and context highlighting
-      sed -i -e "/main = 'ibl'/{ N ; c \ \ \ \ main = 'ibl',\n    opts = { enabled = false, scope = { enabled = false } },"$'\n'"}" ~/.config/nvim/init.lua
-
-      # Add nvim-tree
-      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<NVIMTREE
+      # Add my plugins at the end
+      sed -i -e '/^}, {$/i PLUGINS_PLACEHOLDER' ~/.config/nvim/init.lua
+      sed -i -e '/PLUGINS_PLACEHOLDER/ r '<( { cat <<MY_PLUGINS
   {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
     config = function()
-      require("nvim-tree").setup {}
+      -- vim.keymap.set('n', '<leader>gd', ':TSToolsGoToSourceDefinition', { desc = '[G]oto [D]efinition' })
     end,
   },
-NVIMTREE
+  {
+    'navarasu/onedark.nvim',
+    priority = 999, -- make sure to load this before all the other start plugins
+    config = function()
+      require('onedark').setup {
+        style = 'darker',
+      }
+      -- Enable theme
+      require('onedark').load()
+    end,
+  },
+MY_PLUGINS
     } | tr '"' "'" ) ~/.config/nvim/init.lua
 
-      # Disable netrw and add keymap Leader-E for nvim-tree
-      sed -i -e '/maplocalleader / r '<( cat <<NO_NETRW
-
--- disable netrw at the very start of your init.lua
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
--- set termguicolors to enable highlight groups
-vim.opt.termguicolors = true
-NO_NETRW
-      ) ~/.config/nvim/init.lua
-
-      # Map <leader>f to toogle nvim tree
-      sed -i -e '/Diagnostic keymaps/i\-- NvimTree keymaps\nvim.keymap.set('\''n'\'','\''<leader>f'\'', '\'':NvimTreeToggle<CR>'\'', { desc = '\''Open [f]ile project tree'\'' })' ~/.config/nvim/init.lua
-
-      # Add harpoon
-      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<HARPOON
-  {
-    'ThePrimeagen/harpoon',
-    lazy = false,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    config = true,
-    keys = {
-      { '<leader>ha', '<cmd>lua require("harpoon.mark").add_file()<cr>', desc = 'Add file to harpoon' },
-      { '<leader>hr', '<cmd>lua require("harpoon.mark").rm_file()<cr>', desc = 'Remove file from harpoon' },
-      { '<leader>hn', '<cmd>lua require("harpoon.ui").nav_next()<cr>', desc = 'Go to next harpoon mark' },
-      { '<leader>hp', '<cmd>lua require("harpoon.ui").nav_prev()<cr>', desc = 'Go to previous harpoon mark' },
-      { '<leader>hm', '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>', desc = 'Show harpoon marks' },
-      { '<leader>h1', '<cmd>lua require("harpoon.ui").nav_file(1)<cr>', desc = 'Go to harpoon file 1' },
-      { '<leader>h2', '<cmd>lua require("harpoon.ui").nav_file(2)<cr>', desc = 'Go to harpoon file 2' },
-      { '<leader>h3', '<cmd>lua require("harpoon.ui").nav_file(3)<cr>', desc = 'Go to harpoon file 3' },
-      { '<leader>h4', '<cmd>lua require("harpoon.ui").nav_file(4)<cr>', desc = 'Go to harpoon file 4' },
-    },
-  },
-HARPOON
-      } ) ~/.config/nvim/init.lua
-
-    fi
-
-    # Set telescope to path_display to 'smart'
-    sed -i -e '/require('\''telescope'\'').setup {/ { n; a\ \ \ \ path_display = { "smart" },'$'\n''}' ~/.config/nvim/init.lua
+    sed -i -e '/PLUGINS_PLACEHOLDER/ d ' ~/.config/nvim/init.lua
+#
+#      # Uncomment the typescript language server to install it
+#      sed -i -e '/tsserver/s/-- //' ~/.config/nvim/init.lua
+#      # Install prettierd in Mason - doesn't work
+#      # Look into https://github.com/jay-babu/mason-null-ls.nvim
+#      # sed -i -e '/tsserver/a  prettierd = {},' ~/.config/nvim/init.lua
+#
+#      # Map <leader>p to Prettify (:Format buffer with LSP)
+#      sed -i -e '/Format current buffer with LSP/a\\n\ \ nmap('\''<leader>p'\'', '\'':%!prettierd %<CR>'\'', '\''Prettier current buffer'\'')' ~/.config/nvim/init.lua
+#
+#      # Add - to the definition of a word
+#      sed -i -e '/modeline/i vim.opt.iskeyword:append('\''-'\'')\n' ~/.config/nvim/init.lua
+#
+#      # Remove indentation guides and context highlighting
+#      sed -i -e "/main = 'ibl'/{ N ; c \ \ \ \ main = 'ibl',\n    opts = { enabled = false, scope = { enabled = false } },"$'\n'"}" ~/.config/nvim/init.lua
+#
+#      # Add nvim-tree
+#      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<NVIMTREE
+#  {
+#    "nvim-tree/nvim-tree.lua",
+#    version = "*",
+#    lazy = false,
+#    dependencies = {
+#      "nvim-tree/nvim-web-devicons",
+#    },
+#    config = function()
+#      require("nvim-tree").setup {}
+#    end,
+#  },
+#NVIMTREE
+#    } | tr '"' "'" ) ~/.config/nvim/init.lua
+#
+#      # Disable netrw and add keymap Leader-E for nvim-tree
+#      sed -i -e '/maplocalleader / r '<( cat <<NO_NETRW
+#
+#-- disable netrw at the very start of your init.lua
+#vim.g.loaded_netrw = 1
+#vim.g.loaded_netrwPlugin = 1
+#
+#-- set termguicolors to enable highlight groups
+#vim.opt.termguicolors = true
+#NO_NETRW
+#      ) ~/.config/nvim/init.lua
+#
+#      # Map <leader>f to toogle nvim tree
+#      sed -i -e '/Diagnostic keymaps/i\-- NvimTree keymaps\nvim.keymap.set('\''n'\'','\''<leader>f'\'', '\'':NvimTreeToggle<CR>'\'', { desc = '\''Open [f]ile project tree'\'' })' ~/.config/nvim/init.lua
+#
+#      # Add harpoon
+#      sed -i -e '/import = '\''custom\.plugins'\''/ r '<( { cat <<HARPOON
+#  {
+#    'ThePrimeagen/harpoon',
+#    lazy = false,
+#    dependencies = {
+#      'nvim-lua/plenary.nvim',
+#    },
+#    config = true,
+#    keys = {
+#      { '<leader>ha', '<cmd>lua require("harpoon.mark").add_file()<cr>', desc = 'Add file to harpoon' },
+#      { '<leader>hr', '<cmd>lua require("harpoon.mark").rm_file()<cr>', desc = 'Remove file from harpoon' },
+#      { '<leader>hn', '<cmd>lua require("harpoon.ui").nav_next()<cr>', desc = 'Go to next harpoon mark' },
+#      { '<leader>hp', '<cmd>lua require("harpoon.ui").nav_prev()<cr>', desc = 'Go to previous harpoon mark' },
+#      { '<leader>hm', '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>', desc = 'Show harpoon marks' },
+#      { '<leader>h1', '<cmd>lua require("harpoon.ui").nav_file(1)<cr>', desc = 'Go to harpoon file 1' },
+#      { '<leader>h2', '<cmd>lua require("harpoon.ui").nav_file(2)<cr>', desc = 'Go to harpoon file 2' },
+#      { '<leader>h3', '<cmd>lua require("harpoon.ui").nav_file(3)<cr>', desc = 'Go to harpoon file 3' },
+#      { '<leader>h4', '<cmd>lua require("harpoon.ui").nav_file(4)<cr>', desc = 'Go to harpoon file 4' },
+#    },
+#  },
+#HARPOON
+#      } ) ~/.config/nvim/init.lua
+#
+#      # Set telescope to path_display to 'smart'
+#      sed -i -e '/require('\''telescope'\'').setup {/ { n; a\ \ \ \ path_display = { "smart" },'$'\n''}' ~/.config/nvim/init.lua
+   fi
 }
 
 function setupProjectsDir() {
